@@ -1,0 +1,67 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model productManager.Models.AddStoreViewModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Add Store</h2>
+
+            <form method="post">
+                <div class="mb-3">
+                    <label asp-for="StorName" class="form-label">Store Location</label>
+                    <input asp-for="StorName" class="form-control" />
+                    <span asp-validation-for="StorName" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Add Store</button>
+                </div>
+            </form>
+        </div>
+
+
+
+        <div class="col-md-12 mt-5">
+            <h3>Store List</h3>
+            <table class="table table-bordered table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Store Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                    }
+                    @foreach (var item in Model.StoreList)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.StorName</td>
+                            </tr>
+                        i++;
+                        }
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            let table = new DataTable('#myTable', {
+                responsive: true
+            });
+        });
+    </script>
+}

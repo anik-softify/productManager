@@ -5,7 +5,6 @@
 }
 
 @model productManager.Models.AddProductViewModel
-@* @model  *@
 
 <h1>Add product in Database</h1>
 <div class="container">
@@ -25,6 +24,13 @@
             <div>
                 <label>Enter price:</label>
                 <input type="text" class="form-control" asp-for="Price" />
+            </div>
+
+            <div>
+                <label>Select: </label>
+                <select asp-for="TypeId" asp-items="Model.GenderList" class="form-control">
+                    <option value="">-- Select Gender --</option>
+                </select>
             </div>
 
             <div class="form-group">

@@ -17,19 +17,39 @@ namespace productManager.Data
 
         public DbSet<Types> types { get; set; }
 
+        public DbSet<Store> Store { get; set; }
+        
+        public DbSet<StorePrdt> StorePrdt { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Product>()
-                    .HasOne(p => p.Product)
-                    .WithMany(t => t.Types)
-                    .HasForeignkey<Types>(p => p.Types);
- 
+                .Property(p => p.Id)
+                .ValueGeneratedOnAdd(); // auto-increment
+
+
+            modelBuilder.Entity<Product>()
+                    .HasOne(p => p.Types)
+                    .WithMany(t => t.Products)
+                    .HasForeignKey(p => p.TypeId);
+
+            //many to many start
+            modelBuilder.Entity<StorePrdt>()
+                .HasOne(sp => sp.Product)
+                .WithMany(p => p.StorePrdts)
+                .HasForeignKey(sp => sp.PrdtId);
+
+            modelBuilder.Entity<StorePrdt>()
+                .HasOne(sp => sp.Store)
+                .WithMany(s => s.StorePrdt)
+                .HasForeignKey(sp => sp.StoreId);
+            //many to many end
 
             modelBuilder.Entity<Types>().HasData(
-                new Types { Gender = "Male" },
-                new Types { Gender = "Female" }
+                new Types { Id = 1, Gender = "Male" },
+                new Types { Id = 2,  Gender = "Female" }
             );
         }
     }

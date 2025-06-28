@@ -1,0 +1,41 @@
+﻿@model List<StoreProductViewModel>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Store-Wise Product List</h2>
+    <a class="btn btn-primary text-dark" asp-area="" asp-controller="product" asp-action="add">Add</a>
+    <a class="btn btn-primary text-dark" asp-area="" asp-controller="product" asp-action="Filter">Update</a>
+
+
+    <table class="table table-striped table-bordered" id="myTable">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Gender</th>
+                <th>Store</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price</td>
+                    <td>@item.Gender</td>
+                    <td>@item.StoreName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            let table = new DataTable('#myTable', {
+                responsive: true
+            });
+        });
+    </script>
+}
