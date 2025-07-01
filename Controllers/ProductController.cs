@@ -60,9 +60,7 @@ namespace productManager.Controllers
 
                     _context.StorePrdt.Add(storePrdt);
                     _context.SaveChangesAsync();
-
                 }
-
             return RedirectToAction("list");
         }
 
@@ -94,9 +92,7 @@ namespace productManager.Controllers
                 Products = products,
                 Stores = stores
             };
-
             return View(viewModel);
-        
         }
 
 
@@ -149,17 +145,38 @@ namespace productManager.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult GetStore() {
+            var list = _context.Store
+               .Select(s => new AddStoreViewModel
+               {
+                   StorName = s.StorName
+               })
+               .ToList();
+            return Json(list);
+        }
+
 
         [HttpPost]
         public IActionResult Store(AddStoreViewModel viewModel)
         {
-            var store = new Store
-            {
-                StorName = viewModel.StorName
-            };
-            _context.Store.Add(store);
-            _context.SaveChanges();
-            return View(viewModel);
+            if (viewModel.StorName != null) {
+                var store = new Store
+                {
+                    StorName = viewModel.StorName
+                };
+
+                _context.Store.Add(store);
+                _context.SaveChanges();
+            }
+
+            var list = _context.Store
+               .Select(s => new AddStoreViewModel
+               {
+                   StorName = s.StorName
+               })
+               .ToList();
+            return Ok(list);
         }
 
     }

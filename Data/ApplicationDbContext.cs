@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using productManager.Controllers;
 using productManager.Models.Entities;
 
 namespace productManager.Data
@@ -20,6 +21,12 @@ namespace productManager.Data
         public DbSet<Store> Store { get; set; }
         
         public DbSet<StorePrdt> StorePrdt { get; set; }
+
+        public DbSet<User> User{ get; set; } 
+
+        public DbSet<Purchase> Purchases { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +53,19 @@ namespace productManager.Data
                 .WithMany(s => s.StorePrdt)
                 .HasForeignKey(sp => sp.StoreId);
             //many to many end
+
+
+            //Many to many join start
+            modelBuilder.Entity<Purchase>()
+                .HasOne(p => p.Product)
+                .WithMany(pur => pur.Purchases)
+                .HasForeignKey(p => p.prdtId);
+
+            modelBuilder.Entity<Purchase>()
+                .HasOne(u => u.User)
+                .WithMany(pur => pur.Purchase)
+                .HasForeignKey(u => u.CusId);
+            //many to many join end
 
             modelBuilder.Entity<Types>().HasData(
                 new Types { Id = 1, Gender = "Male" },

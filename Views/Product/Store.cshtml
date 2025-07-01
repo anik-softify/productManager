@@ -3,24 +3,20 @@
 *@
 @{
 }
-@model productManager.Models.AddStoreViewModel
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h2 class="mb-4">Add Store</h2>
 
-            <form method="post">
                 <div class="mb-3">
-                    <label asp-for="StorName" class="form-label">Store Location</label>
-                    <input asp-for="StorName" class="form-control" />
-                    <span asp-validation-for="StorName" class="text-danger"></span>
+                    <label class="form-label">Store Location</label>
+                    <input class="form-control" id="storName" />
+                    <span class="text-danger"></span>
                 </div>
-
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Add Store</button>
+                    <button type="submit" class="btn btn-primary" id="addStore">Add Store</button>
                 </div>
-            </form>
         </div>
 
 
@@ -35,17 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-                        int i = 1;
-                    }
-                    @foreach (var item in Model.StoreList)
-                        {
-                            <tr>
-                                <td>@i</td>
-                                <td>@item.StorName</td>
-                            </tr>
-                        i++;
-                        }
+                    
                 </tbody>
             </table>
         </div>
@@ -60,8 +46,56 @@
     <script>
         $(document).ready(function () {
             let table = new DataTable('#myTable', {
-                responsive: true
+                responsive: true,
+
+                ajax: {
+                    url: '/product/GetStore',
+                    type: 'GET',
+                    dataSrc: '',
+                },
+
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    { data: 'storName' }
+                ],
+
             });
         });
+
+
+        $('#addStore').on("click", function () {
+            let StorName = $('#storName').val();
+            let table = $('#myTable').DataTable();
+
+
+            $.ajax({
+                url: '/product/store',
+                method: 'POST',
+                data: { StorName: StorName },
+
+                success: function (response) {
+                    console.log('Added store:', response);
+                    $('#storName').val('');
+                    table.ajax.reload();
+                },
+
+
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+
+
+         
+
+
+
+
     </script>
 }
